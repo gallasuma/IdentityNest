@@ -208,10 +208,16 @@
               <form id="questionnaire">
                 <div class="question">
                     <label for="organizationScale">
-                     <h5>What is the scale or magnitude of your organization?
-                    </h5> 
-                    </label><br>
-                    <input type="text" id="organizationScale" name="organizationScale" placeholder="Size of the Organization">
+                     <h5>What is the scale or magnitude of your organization? </h5> 
+                    </label>
+                    <br>
+                    <select id="organizationScale" name="organizationScale">
+                      <option value="" selected disabled>Select Organization Scale</option>
+                      <option value="Small Enterprise (&lt;1000 employees)">Small Enterprise (&lt;1000 employees)</option>
+                      <option value="Medium Enterprise (1000-4999 employees)">Medium Enterprise (1000-4999 employees)</option>
+                      <option value="Large Enterprise (5000-49999 employees)">Large Enterprise (5000-49999 employees)</option>
+                      <option value="Major Enterprise (&gt;50000 employees)">Major Enterprise (&gt;50000 employees)</option>
+                  </select>
               
                   </div>
                   <br>
@@ -220,8 +226,14 @@
                      <h5>What is the financial allocation or budget for your organization?
                     </h5> 
                     </label><br>
-                    <input type="text" id="organizationBudget" name="organizationBudget" placeholder="Organization Budget">
-                </div>
+                    <select id="organizationBudget" name="organizationBudget">
+                      <option value="" selected disabled>Organization Budget</option>
+                      <option value="Micro-scale: &lt;$10000">Micro-scale: &lt;$10000</option>
+                      <option value="Small-scale: $10000 - $50000">Small-scale: $10000 - $50000</option>
+                      <option value="Moderate-scale: $50000 - $100000">Moderate-scale: $50000 - $100000</option>
+                      <option value="Large-scale: &gt;$100000">Large-scale: &gt;$100000</option>
+                  </select>
+                    </div>
                 <br>
                 <div class="question">
                     <label>
@@ -480,6 +492,136 @@
             const integratingApplications = additionalQuestions.querySelector('#integratingApplications').value;
             const significanceForYou = additionalQuestions.querySelector('#significanceForYou').value;
     
+if (
+        selectedEnvironment &&
+        selectedEnvironment.value === 'Cloud' &&
+        document.getElementById('feature1').checked
+    ) {
+        // Suggest the Saviynt Tool
+        alert('Saviynt Tool is a recommended option for identity governance based on your selections.');
+    } else if(selectedEnvironment &&
+        selectedEnvironment.value !== 'Cloud' &&
+        document.getElementById('feature1').checked){
+alert('Sailpoint Tool is a recommended option for identity governance based on your selections.');
+}
+
+
+const accountManagementValue = document.getElementById('accountAssetImportance').value;
+const assetManagementValue = document.getElementById('privilegedVulnerabilitySignificance').value;
+
+if (
+    selectedEnvironment &&
+    selectedEnvironment.value === 'Cloud' &&
+    document.getElementById('feature2').checked &&
+    accountManagementValue === '' &&
+    assetManagementValue === ''
+) {
+    // Suggest CyberArk for Cloud and Privilege and Access Management
+    alert('CyberArk is a recommended option for Privilege and Access Management based on your selections.');
+} else if (
+    selectedEnvironment &&
+    selectedEnvironment.value !== 'Cloud' &&
+    document.getElementById('feature2').checked &&
+    accountManagementValue === '' &&
+    assetManagementValue === ''
+) {
+    // Suggest Beyond Trust for Non-Cloud and Privilege and Access Management
+    alert('Beyond Trust is a recommended option for Privilege and Access Management based on your selections.');
+}
+
+const appIntegrationValue = document.getElementById('integratingApplications').value;
+const iamImportanceValue = document.getElementById('significanceForYou').value;
+
+if (
+    appIntegrationValue === '' &&
+    iamImportanceValue === '' &&
+    selectedEnvironment &&
+    selectedEnvironment.value === 'Hybrid' &&
+    document.getElementById('feature3').checked
+) {
+    // Suggest ForgeRock for Hybrid and Feature 3 checked with no other selections
+    alert('ForgeRock is a recommended option for Identity and Access Management based on your selections.');
+} else if (
+    appIntegrationValue === '' &&
+    iamImportanceValue === '' &&
+    selectedEnvironment &&
+    selectedEnvironment.value !== 'Hybrid' &&
+    document.getElementById('feature3').checked
+) {
+    // Suggest Ping Identity for non-Hybrid and Feature 3 checked with no other selections
+    alert('Ping Identity is a recommended option for Identity and Access Management based on your selections.');
+}
+
+
+const sailpointKeywords = [
+        'governance', 'compliance', 'identity management', 'risk', 'analytics', 'dashboard', 'reporting',
+        'segregation', 'certification', 'campaign', 'policy', 'auditing', 'integration', 'entitlement management',
+        'role based access control', 'account management', 'entitlements', 'reviews', 'reviewing', 'policies',
+        'technical rules', 'birthright', 'provision', 'provisioning', 'deprovision', 'deprovisioning', 
+        'user updates', 'automated provisioning'
+    ];
+
+    const specificRequirementsValue = document.getElementById('specificRequirementsInput').value.toLowerCase();
+    const selfServiceSignificanceValue = document.getElementById('selfServiceSignificance').value;
+    const customizationImportanceValue = document.getElementById('customizationImportance').value;
+    const environmentValue = document.querySelector('input[name="environment"]:checked').value;
+
+    // Check if any Sailpoint keyword is present
+    const containsSailpointKeywords = sailpointKeywords.some(keyword =>
+        specificRequirementsValue.split(/[\s,]+/).includes(keyword.toLowerCase())
+    );
+
+    if (
+        containsSailpointKeywords &&
+        selfServiceSignificanceValue === 'High' &&
+        customizationImportanceValue === 'High' &&
+        (environmentValue === 'On Premise' || environmentValue === 'Hybrid')
+    ) {
+        alert('Sailpoint Tool is a recommended option for identity governance based on your selections.');
+    }
+else if (
+        containsSailpointKeywords &&
+        selfServiceSignificanceValue !== 'High' &&
+        customizationImportanceValue !== 'High' &&
+        (environmentValue === 'Cloud')
+    ) {
+        alert('Saviynt Tool is a recommended option for identity governance based on your selections.');
+    }
+
+const toolRequirements = document.getElementById('specificRequirementsInput').value.toLowerCase();
+const accountManagement = document.getElementById('accountAssetImportance').value;
+const privilegeManagement = document.getElementById('privilegedVulnerabilitySignificance').value;
+const selectedFeature = document.querySelector('input[name="feature2"]:checked').value;
+
+const cyberArkKeywords = [
+    'privileged', 'account security', 'vaulting', 'vault', 'credential vaulting', 'least privilege enforcement',
+    'privilege', 'threat analytics', 'threat', 'automated privilege', 'password management', 'password',
+    'session management', 'session', 'session monitoring', 'remote access', 'privilege elevation',
+    'delegation', 'managing credentials'
+];
+
+const containsCyberArkKeywords = toolRequirements.trim() === '' ||
+    cyberArkKeywords.some(keyword =>
+        toolRequirements.split(/[\s,]+/).includes(keyword.toLowerCase())
+    );
+
+if (
+    (containsCyberArkKeywords || selectedFeature === 'Privilege and Access Management') &&
+    accountManagement === 'Account Management' &&
+    privilegeManagement === 'Privileged Access Management Capabilities'
+) {
+    // Suggest CyberArk
+    alert('CyberArk is a recommended option for Privilege and Access Management based on your selections.');
+} else if(
+    (containsCyberArkKeywords || selectedFeature === 'Privilege and Access Management') &&
+    accountManagement === 'Asset Management' &&
+    privilegeManagement === 'Vulnerability Assessment and Patch Management Features'
+) {
+    // Suggest Beyond Trust for other scenarios
+    alert('Beyond Trust is a recommended option for Privilege and Access Management based on your selections.');
+}
+
+
             }
         </script>
             </div>
